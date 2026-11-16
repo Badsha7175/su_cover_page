@@ -101,12 +101,14 @@
         }
 
         .page-container {
-            width: 794px; /* Exact A4 width in px (96dpi) */
-            height: 1123px; /* Exact A4 height in px (96dpi) */
+            width: 794px;
+            /* Exact A4 width in px (96dpi) */
+            height: 1123px;
+            /* Exact A4 height in px (96dpi) */
             background: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            /* Standard screen padding */
-            padding: 56px; 
+            padding: 56px;
+            /* Approx 15mm */
             box-sizing: border-box;
             transform-origin: top left;
             transform: scale(var(--scale-factor));
@@ -118,11 +120,12 @@
             position: relative;
             box-sizing: border-box;
             height: 100%;
+            /* Uses full container height */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 40px 30px 30px 30px; 
+            padding: 40px 30px 30px 30px;
         }
 
         .top-banner {
@@ -215,9 +218,17 @@
         }
 
         /* Prevent text wrapping in submit boxes */
-        .flex-row .label { width: 145px; } 
-        .flex-row .label-student { width: 95px; }
-        .flex-row .value { flex: 1; }
+        .flex-row .label {
+            width: 145px;
+        }
+
+        .flex-row .label-student {
+            width: 95px;
+        }
+
+        .flex-row .value {
+            flex: 1;
+        }
 
         .footer-date {
             border: 1px solid #000;
@@ -232,13 +243,17 @@
 
         /* --- Responsive Design (Mobile/Tablet) --- */
         @media (max-width: 1024px) {
-            :root { --scale-factor: 0.8; }
+            :root {
+                --scale-factor: 0.8;
+            }
+
             body {
                 flex-direction: column;
                 align-items: center;
                 padding: 10px;
                 gap: 20px;
             }
+
             .form-container {
                 max-width: 100%;
                 height: auto;
@@ -248,15 +263,21 @@
         }
 
         @media (max-width: 768px) {
-            :root { --scale-factor: 0.6; }
+            :root {
+                --scale-factor: 0.6;
+            }
         }
-        
+
         @media (max-width: 480px) {
-            :root { --scale-factor: 0.44; }
+            :root {
+                --scale-factor: 0.44;
+            }
         }
 
         @media (max-width: 380px) {
-            :root { --scale-factor: 0.36; }
+            :root {
+                --scale-factor: 0.36;
+            }
         }
 
         /* --- FINAL FIX FOR MOBILE PRINTING (SAMSUNG & CHROME) --- */
@@ -269,18 +290,18 @@
 
         @media print {
             :root {
-                --scale-factor: 1 !important; 
+                --scale-factor: 1 !important;
             }
 
             body {
                 background: none;
                 padding: 0;
                 margin: 0;
-                display: block; 
+                display: block;
             }
 
             .form-container {
-                display: none !important; 
+                display: none !important;
             }
 
             .preview-outer {
@@ -303,11 +324,11 @@
                 box-shadow: none !important;
                 margin: 0 !important;
                 /* Force Exact dimensions */
-                width: 210mm !important; 
+                width: 210mm !important;
                 height: 297mm !important;
                 max-height: 297mm !important;
                 /* Reduced physical padding on the container so the border box expands */
-                padding: 5mm !important; 
+                padding: 5mm !important;
                 transform: none !important;
                 page-break-after: avoid !important;
                 page-break-inside: avoid !important;
@@ -317,7 +338,7 @@
                 top: 0;
                 left: 0;
             }
-            
+
             .border-box {
                 /* Make the border box take up the remaining space inside the 5mm padding */
                 height: calc(100% - 10mm) !important;
@@ -327,12 +348,21 @@
                 page-break-inside: avoid !important;
                 box-sizing: border-box !important;
             }
-            
+
             /* Squeeze the elements vertically during print to guarantee fit */
-            .header h1 { margin-bottom: 10px !important; }
-            .logo-placeholder { margin-bottom: 10px !important; height: 160px !important; }
-            .info-table { margin-bottom: 10px !important; }
-            
+            .header h1 {
+                margin-bottom: 10px !important;
+            }
+
+            .logo-placeholder {
+                margin-bottom: 10px !important;
+                height: 160px !important;
+            }
+
+            .info-table {
+                margin-bottom: 10px !important;
+            }
+
             .footer-date {
                 margin-top: 5px !important;
                 margin-bottom: 0 !important;
@@ -346,7 +376,7 @@
     <!-- 1. Form Section -->
     <div class="form-container">
         <h3>Fill Report Details</h3>
-        
+
         <div class="input-group">
             <label>Report / Assignment Type</label>
             <input type="text" id="inp-rtype" value="Lab Report-01" oninput="updateField('val-rtype', this.value)">
@@ -354,11 +384,13 @@
 
         <div class="input-group">
             <label>Experiment Name</label>
-            <input type="text" id="inp-exp" value="Different Types of Inheritance in Java" oninput="updateField('val-exp', this.value)">
+            <input type="text" id="inp-exp" value="Different Types of Inheritance in Java"
+                oninput="updateField('val-exp', this.value)">
         </div>
         <div class="input-group">
             <label>Course Title</label>
-            <input type="text" id="inp-ctitle" value="Object Oriented Programming II" oninput="updateField('val-ctitle', this.value)">
+            <input type="text" id="inp-ctitle" value="Object Oriented Programming II"
+                oninput="updateField('val-ctitle', this.value)">
         </div>
         <div class="input-group">
             <label>Course Code</label>
@@ -366,7 +398,8 @@
         </div>
         <div class="input-group">
             <label>Department</label>
-            <input type="text" id="inp-dept" value="Computer Science & Engineering (CSE)" oninput="updateField('val-dept', this.value)">
+            <input type="text" id="inp-dept" value="Computer Science & Engineering (CSE)"
+                oninput="updateField('val-dept', this.value)">
         </div>
         <hr>
         <div class="input-group">
@@ -380,7 +413,8 @@
         <hr>
         <div class="input-group">
             <label>Student Name</label>
-            <input type="text" id="inp-sname" value="Abdullah Bin Badsha" oninput="updateField('val-sname', this.value)">
+            <input type="text" id="inp-sname" value="Abdullah Bin Badsha"
+                oninput="updateField('val-sname', this.value)">
         </div>
         <div class="input-group">
             <label>Student ID</label>
@@ -388,7 +422,7 @@
         </div>
         <div class="input-group">
             <label>Semester</label>
-            <input type="text" id="inp-sem" value="8th" oninput="updateField('val-sem', this.value)">
+            <input type="text" id="inp-sem" value="8th" oninput="updateDateSuffix('val-sem', this.value)">
         </div>
         <div class="input-group">
             <label>Section</label>
@@ -397,13 +431,14 @@
         <hr>
         <div class="input-group">
             <label>Date of Submission</label>
-            <input type="text" id="inp-date" value="16th Nov, 2026" oninput="updateField('val-date', this.value)">
+            <input type="text" id="inp-date" value="16th Nov, 2026" oninput="updateDateSuffix('val-date', this.value)">
         </div>
 
         <button class="btn-download" onclick="window.print()">Download / Save as PDF</button>
 
         <!-- DEVELOPER CREDIT SECTION -->
-        <div style="margin-top: 25px; text-align: center; font-size: 13px; color: #666; border-top: 1px solid #eee; padding-top: 15px;">
+        <div
+            style="margin-top: 25px; text-align: center; font-size: 13px; color: #666; border-top: 1px solid #eee; padding-top: 15px;">
             Developed by <strong>Abdullah Bin Badsha</strong>
         </div>
     </div>
@@ -468,7 +503,7 @@
                             </div>
                             <div class="flex-row">
                                 <span class="label-student">Semester</span>
-                                <span class="value">: <span id="val-sem">8th</span></span>
+                                <span class="value">: <span id="val-sem">8<sup>th</sup></span></span>
                             </div>
                             <div class="flex-row">
                                 <span class="label-student">Section</span>
@@ -478,7 +513,7 @@
                     </div>
 
                     <div class="footer-date">
-                        Date of Submission : <span id="val-date">16th Nov, 2026</span>
+                        Date of Submission : <span id="val-date">16<sup>th</sup> Nov, 2026</span>
                     </div>
                 </div>
             </div>
@@ -490,7 +525,14 @@
         function updateField(spanId, newValue) {
             document.getElementById(spanId).innerText = newValue;
         }
+
+        // Auto convert th, st, nd, rd to superscript
+        function updateDateSuffix(spanId, newValue) {
+            const formattedValue = newValue.replace(/(\d+)(st|nd|rd|th)/gi, "$1<sup>$2</sup>");
+            document.getElementById(spanId).innerHTML = formattedValue;
+        }
     </script>
 
 </body>
+
 </html>
