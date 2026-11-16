@@ -91,21 +91,23 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            /* Fixed dynamic height issue by letting it auto-expand */
             height: auto;
+            overflow: visible;
+            /* Ensure nothing is cut off */
         }
 
         .page-container {
-            /* Changed to mm for exact print accuracy, CSS scaling handles the screen view */
-            width: 210mm;
-            height: 297mm;
+            width: 794px;
+            /* Exact A4 width at 96dpi */
+            height: 1123px;
+            /* Exact A4 height at 96dpi */
             background: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            padding: 15mm;
+            padding: 56px;
+            /* Approx 15mm */
             box-sizing: border-box;
             transform-origin: top center;
             flex-shrink: 0;
-            /* Prevents flexbox from squeezing the container */
         }
 
         .border-box {
@@ -113,11 +115,11 @@
             position: relative;
             box-sizing: border-box;
             height: 100%;
+            /* Uses full container height */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            /* Spreads content nicely */
             padding: 50px 30px 40px 30px;
         }
 
@@ -230,12 +232,13 @@
             font-size: 19px;
             background: #fff;
             box-sizing: border-box;
-            margin-top: 30px;
-            /* Space between submit boxes and date */
+            /* Changed margin-top to a smaller, controlled value */
+            margin-top: 20px;
+            /* Added margin-bottom to ensure it stays inside the border */
+            margin-bottom: 10px;
         }
 
         /* --- Responsive Design (Mobile/Tablet) --- */
-        /* FIX: Using zoom instead of transform: scale for better layout control on mobile */
         @media (max-width: 1024px) {
             body {
                 flex-direction: column;
@@ -253,31 +256,37 @@
 
             .preview-wrapper {
                 justify-content: center;
-                /* Resetting any overflow tricks to allow full height visibility */
-                overflow: visible;
+                /* Crucial for mobile view scaling */
+                transform-origin: top center;
+                transform: scale(0.8);
+                margin-bottom: -224px;
+                /* 1123 * (1 - 0.8) */
             }
 
             .page-container {
-                zoom: 0.8;
-                /* Replaced transform with zoom */
+                /* Removed zoom, using transform on wrapper instead */
+                transform: none;
             }
         }
 
         @media (max-width: 768px) {
-            .page-container {
-                zoom: 0.6;
+            .preview-wrapper {
+                transform: scale(0.6);
+                margin-bottom: -449px;
             }
         }
 
         @media (max-width: 480px) {
-            .page-container {
-                zoom: 0.45;
+            .preview-wrapper {
+                transform: scale(0.42);
+                margin-bottom: -651px;
             }
         }
 
         @media (max-width: 380px) {
-            .page-container {
-                zoom: 0.38;
+            .preview-wrapper {
+                transform: scale(0.35);
+                margin-bottom: -730px;
             }
         }
 
@@ -296,11 +305,13 @@
 
             .form-container {
                 display: none;
-                /* Hide form */
             }
 
             .preview-wrapper {
                 display: block;
+                transform: none !important;
+                /* Reset transform */
+                margin: 0 !important;
             }
 
             .page-container {
@@ -309,11 +320,8 @@
                 width: 210mm !important;
                 height: 297mm !important;
                 padding: 15mm !important;
-                zoom: 1 !important;
-                /* Reset zoom for print */
                 transform: none !important;
                 page-break-after: avoid;
-                /* Prevent second empty page */
             }
 
             .border-box {
