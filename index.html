@@ -6,11 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Lab Report Generator</title>
     <style>
-        /* --- Workspace & Form Styles (Screen Only) --- */
+        /* --- CSS Variables for Perfect Scaling --- */
         :root {
+            --scale-factor: 1;
             --bg-color: #e2e8f0;
         }
 
+        /* --- Workspace & Form Styles (Screen Only) --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
@@ -86,28 +88,30 @@
         }
 
         /* --- Your Original A4 Page Styles --- */
-        .preview-wrapper {
-            font-family: 'Times New Roman', Times, serif;
+        .preview-outer {
             display: flex;
             justify-content: center;
             width: 100%;
-            height: auto;
-            overflow: visible;
-            /* Ensure nothing is cut off */
+        }
+
+        .preview-wrapper {
+            /* Dynamically calculates dimensions based on scale so no space is clipped */
+            width: calc(794px * var(--scale-factor));
+            height: calc(1123px * var(--scale-factor));
+            position: relative;
         }
 
         .page-container {
-            width: 794px;
-            /* Exact A4 width at 96dpi */
-            height: 1123px;
-            /* Exact A4 height at 96dpi */
+            width: 794px; /* Exact A4 width in px (96dpi) */
+            height: 1123px; /* Exact A4 height in px (96dpi) */
             background: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            padding: 56px;
-            /* Approx 15mm */
+            padding: 45px; /* Reduced slightly to prevent print spillover */
             box-sizing: border-box;
-            transform-origin: top center;
-            flex-shrink: 0;
+            /* Critical for perfect scaling */
+            transform-origin: top left;
+            transform: scale(var(--scale-factor));
+            font-family: 'Times New Roman', Times, serif;
         }
 
         .border-box {
@@ -115,12 +119,11 @@
             position: relative;
             box-sizing: border-box;
             height: 100%;
-            /* Uses full container height */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 50px 30px 40px 30px;
+            padding: 50px 30px 25px 30px; /* Reduced bottom padding */
         }
 
         .top-banner {
@@ -165,7 +168,7 @@
             width: 100%;
             font-size: 23px;
             border-collapse: collapse;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .info-table td {
@@ -212,17 +215,9 @@
             margin-bottom: 10px;
         }
 
-        .flex-row .label {
-            width: 140px;
-        }
-
-        .flex-row .label-student {
-            width: 95px;
-        }
-
-        .flex-row .value {
-            flex: 1;
-        }
+        .flex-row .label { width: 140px; }
+        .flex-row .label-student { width: 95px; }
+        .flex-row .value { flex: 1; }
 
         .footer-date {
             border: 1px solid #000;
@@ -232,100 +227,87 @@
             font-size: 19px;
             background: #fff;
             box-sizing: border-box;
-            /* Changed margin-top to a smaller, controlled value */
-            margin-top: 20px;
-            /* Added margin-bottom to ensure it stays inside the border */
-            margin-bottom: 10px;
+            /* Adjusted margins so it doesn't push the border out */
+            margin: 15px auto 0 auto;
         }
 
         /* --- Responsive Design (Mobile/Tablet) --- */
         @media (max-width: 1024px) {
+            :root { --scale-factor: 0.8; }
             body {
                 flex-direction: column;
                 align-items: center;
                 padding: 10px;
                 gap: 20px;
             }
-
             .form-container {
                 max-width: 100%;
                 height: auto;
                 max-height: none;
                 overflow-y: visible;
             }
-
-            .preview-wrapper {
-                justify-content: center;
-                /* Crucial for mobile view scaling */
-                transform-origin: top center;
-                transform: scale(0.8);
-                margin-bottom: -224px;
-                /* 1123 * (1 - 0.8) */
-            }
-
-            .page-container {
-                /* Removed zoom, using transform on wrapper instead */
-                transform: none;
-            }
         }
 
         @media (max-width: 768px) {
-            .preview-wrapper {
-                transform: scale(0.6);
-                margin-bottom: -449px;
-            }
+            :root { --scale-factor: 0.6; }
         }
-
+        
         @media (max-width: 480px) {
-            .preview-wrapper {
-                transform: scale(0.42);
-                margin-bottom: -651px;
-            }
+            :root { --scale-factor: 0.44; }
         }
 
         @media (max-width: 380px) {
-            .preview-wrapper {
-                transform: scale(0.35);
-                margin-bottom: -730px;
-            }
+            :root { --scale-factor: 0.36; }
         }
 
         /* --- Print Specific Styles --- */
         @page {
-            size: A4;
+            size: A4 portrait;
             margin: 0;
         }
 
         @media print {
+            :root {
+                --scale-factor: 1 !important; /* Force actual size */
+            }
+
             body {
                 background: none;
                 padding: 0;
-                display: block;
+                margin: 0;
+                display: block; 
             }
 
             .form-container {
-                display: none;
+                display: none !important; 
+            }
+
+            .preview-outer {
+                display: block;
             }
 
             .preview-wrapper {
-                display: block;
-                transform: none !important;
-                /* Reset transform */
+                width: 210mm !important;
+                height: 297mm !important;
                 margin: 0 !important;
             }
 
             .page-container {
-                box-shadow: none;
+                box-shadow: none !important;
                 margin: 0 !important;
-                width: 210mm !important;
-                height: 297mm !important;
+                width: 210mm !important; 
+                /* Use strictly 296mm height to prevent a blank second page */
+                height: 296mm !important; 
                 padding: 15mm !important;
                 transform: none !important;
                 page-break-after: avoid;
+                page-break-inside: avoid;
+                overflow: hidden; /* Forcibly stop bottom cutoff from rendering to next page */
             }
-
+            
             .border-box {
                 page-break-inside: avoid;
+                height: 100%;
             }
         }
     </style>
@@ -336,7 +318,7 @@
     <!-- 1. Form Section -->
     <div class="form-container">
         <h3>Fill Report Details</h3>
-
+        
         <div class="input-group">
             <label>Report / Assignment Type</label>
             <input type="text" id="inp-rtype" value="Lab Report-01" oninput="updateField('val-rtype', this.value)">
@@ -344,13 +326,11 @@
 
         <div class="input-group">
             <label>Experiment Name</label>
-            <input type="text" id="inp-exp" value="Different Types of Inheritance in Java"
-                oninput="updateField('val-exp', this.value)">
+            <input type="text" id="inp-exp" value="Different Types of Inheritance in Java" oninput="updateField('val-exp', this.value)">
         </div>
         <div class="input-group">
             <label>Course Title</label>
-            <input type="text" id="inp-ctitle" value="Object Oriented Programming II"
-                oninput="updateField('val-ctitle', this.value)">
+            <input type="text" id="inp-ctitle" value="Object Oriented Programming II" oninput="updateField('val-ctitle', this.value)">
         </div>
         <div class="input-group">
             <label>Course Code</label>
@@ -358,8 +338,7 @@
         </div>
         <div class="input-group">
             <label>Department</label>
-            <input type="text" id="inp-dept" value="Computer Science & Engineering (CSE)"
-                oninput="updateField('val-dept', this.value)">
+            <input type="text" id="inp-dept" value="Computer Science & Engineering (CSE)" oninput="updateField('val-dept', this.value)">
         </div>
         <hr>
         <div class="input-group">
@@ -373,8 +352,7 @@
         <hr>
         <div class="input-group">
             <label>Student Name</label>
-            <input type="text" id="inp-sname" value="Abdullah Bin Badsha"
-                oninput="updateField('val-sname', this.value)">
+            <input type="text" id="inp-sname" value="Abdullah Bin Badsha" oninput="updateField('val-sname', this.value)">
         </div>
         <div class="input-group">
             <label>Student ID</label>
@@ -397,82 +375,83 @@
         <button class="btn-download" onclick="window.print()">Download / Save as PDF</button>
 
         <!-- DEVELOPER CREDIT SECTION -->
-        <div
-            style="margin-top: 25px; text-align: center; font-size: 13px; color: #666; border-top: 1px solid #eee; padding-top: 15px;">
+        <div style="margin-top: 25px; text-align: center; font-size: 13px; color: #666; border-top: 1px solid #eee; padding-top: 15px;">
             Developed by <strong>Abdullah Bin Badsha</strong>
         </div>
     </div>
 
     <!-- 2. Preview Section (Your A4 Page) -->
-    <div class="preview-wrapper">
-        <div class="page-container">
-            <div class="border-box">
-                <div class="top-banner"></div>
-                <div class="header">
-                    <h1>SONARGAON UNIVERSITY (SU)</h1>
-                    <img src="./SU-logo.png" alt="SU Logo" class="logo-placeholder">
-                    <h2><span id="val-rtype">Lab Report-01</span></h2>
-                </div>
+    <div class="preview-outer">
+        <div class="preview-wrapper">
+            <div class="page-container">
+                <div class="border-box">
+                    <div class="top-banner"></div>
+                    <div class="header">
+                        <h1>SONARGAON UNIVERSITY (SU)</h1>
+                        <img src="./SU-logo.png" alt="SU Logo" class="logo-placeholder">
+                        <h2><span id="val-rtype">Lab Report-01</span></h2>
+                    </div>
 
-                <table class="info-table">
-                    <tr>
-                        <td>Experiment Name</td>
-                        <td>: <span id="val-exp">Different Types of Inheritance in Java</span></td>
-                    </tr>
-                    <tr>
-                        <td>Course Title</td>
-                        <td>: <span id="val-ctitle">Object Oriented Programming II</span></td>
-                    </tr>
-                    <tr>
-                        <td>Course Code</td>
-                        <td>: <span id="val-ccode">CSE3203</span></td>
-                    </tr>
-                    <tr>
-                        <td>Department</td>
-                        <td>: <span id="val-dept">Computer Science & Engineering (CSE)</span></td>
-                    </tr>
-                </table>
+                    <table class="info-table">
+                        <tr>
+                            <td>Experiment Name</td>
+                            <td>: <span id="val-exp">Different Types of Inheritance in Java</span></td>
+                        </tr>
+                        <tr>
+                            <td>Course Title</td>
+                            <td>: <span id="val-ctitle">Object Oriented Programming II</span></td>
+                        </tr>
+                        <tr>
+                            <td>Course Code</td>
+                            <td>: <span id="val-ccode">CSE3203</span></td>
+                        </tr>
+                        <tr>
+                            <td>Department</td>
+                            <td>: <span id="val-dept">Computer Science & Engineering (CSE)</span></td>
+                        </tr>
+                    </table>
 
-                <div class="submission-area">
-                    <div class="submit-box">
-                        <div class="submit-title"><span>Submitted To :</span></div>
-                        <div class="flex-row">
-                            <span class="label">Name of Teacher </span>
-                            <span class="value">: <span id="val-tname">Abdullah Al Rafi</span></span>
+                    <div class="submission-area">
+                        <div class="submit-box">
+                            <div class="submit-title"><span>Submitted To :</span></div>
+                            <div class="flex-row">
+                                <span class="label">Name of Teacher </span>
+                                <span class="value">: <span id="val-tname">Abdullah Al Rafi</span></span>
+                            </div>
+                            <div class="flex-row">
+                                <span class="label">Designation</span>
+                                <span class="value">: <span id="val-tdesig">Lecturer</span></span>
+                            </div>
+                            <div class="flex-row" style="margin-top: 40px;">
+                                <span class="label">Signature</span>
+                                <span class="value" style="color: #666;">: .........................</span>
+                            </div>
                         </div>
-                        <div class="flex-row">
-                            <span class="label">Designation</span>
-                            <span class="value">: <span id="val-tdesig">Lecturer</span></span>
-                        </div>
-                        <div class="flex-row" style="margin-top: 40px;">
-                            <span class="label">Signature</span>
-                            <span class="value" style="color: #666;">: .........................</span>
+
+                        <div class="submit-box">
+                            <div class="submit-title"><span>Submitted By :</span></div>
+                            <div class="flex-row">
+                                <span class="label-student">Name</span>
+                                <span class="value">: <span id="val-sname">Abdullah Bin Badsha</span></span>
+                            </div>
+                            <div class="flex-row">
+                                <span class="label-student">Student ID</span>
+                                <span class="value">: <span id="val-sid">CSE2402032025</span></span>
+                            </div>
+                            <div class="flex-row">
+                                <span class="label-student">Semester</span>
+                                <span class="value">: <span id="val-sem">8th</span></span>
+                            </div>
+                            <div class="flex-row">
+                                <span class="label-student">Section</span>
+                                <span class="value">: <span id="val-sec">Falcon(32M1)</span></span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="submit-box">
-                        <div class="submit-title"><span>Submitted By :</span></div>
-                        <div class="flex-row">
-                            <span class="label-student">Name</span>
-                            <span class="value">: <span id="val-sname">Abdullah Bin Badsha</span></span>
-                        </div>
-                        <div class="flex-row">
-                            <span class="label-student">Student ID</span>
-                            <span class="value">: <span id="val-sid">CSE2402032025</span></span>
-                        </div>
-                        <div class="flex-row">
-                            <span class="label-student">Semester</span>
-                            <span class="value">: <span id="val-sem">8th</span></span>
-                        </div>
-                        <div class="flex-row">
-                            <span class="label-student">Section</span>
-                            <span class="value">: <span id="val-sec">Falcon(32M1)</span></span>
-                        </div>
+                    <div class="footer-date">
+                        Date of Submission : <span id="val-date">16th Nov, 2026</span>
                     </div>
-                </div>
-
-                <div class="footer-date">
-                    Date of Submission : <span id="val-date">16th Nov, 2026</span>
                 </div>
             </div>
         </div>
@@ -486,5 +465,4 @@
     </script>
 
 </body>
-
 </html>
