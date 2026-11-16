@@ -105,7 +105,6 @@
             height: 1123px; /* Exact A4 height in px (96dpi) */
             background: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            /* Reduced padding specifically for mobile print rendering issues */
             padding: 35px 45px; 
             box-sizing: border-box;
             transform-origin: top left;
@@ -122,7 +121,6 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            /* Adjusted internal padding to free up space at the bottom */
             padding: 40px 25px 20px 25px; 
         }
 
@@ -144,7 +142,7 @@
         }
 
         .header h1 {
-            font-size: 36px; /* Slightly reduced */
+            font-size: 36px;
             font-weight: 600;
             margin: 0 0 20px 0;
             letter-spacing: 0.5px;
@@ -152,21 +150,21 @@
 
         .logo-placeholder {
             display: inline-block;
-            width: 170px; /* Slightly reduced */
-            height: 190px; /* Slightly reduced */
+            width: 170px;
+            height: 190px;
             margin-bottom: 20px;
             object-fit: contain;
         }
 
         .header h2 {
-            font-size: 30px; /* Slightly reduced */
+            font-size: 30px;
             font-weight: 600;
             margin: 0;
         }
 
         .info-table {
             width: 100%;
-            font-size: 21px; /* Slightly reduced */
+            font-size: 21px;
             border-collapse: collapse;
             margin-bottom: 15px;
         }
@@ -191,9 +189,9 @@
         .submit-box {
             width: 49%;
             border: 2px solid #000;
-            padding: 15px 9px; /* Reduced padding */
-            font-size: 18px; /* Slightly reduced */
-            line-height: 1.6; /* Reduced line height */
+            padding: 15px 9px;
+            font-size: 18px;
+            line-height: 1.6;
             box-sizing: border-box;
             background: #fff;
             z-index: 2;
@@ -215,7 +213,8 @@
             margin-bottom: 8px;
         }
 
-        .flex-row .label { width: 140px; }
+        /* FIX: Increased label width to prevent text from breaking into a second line */
+        .flex-row .label { width: 155px; } 
         .flex-row .label-student { width: 95px; }
         .flex-row .value { flex: 1; }
 
@@ -227,7 +226,7 @@
             font-size: 19px;
             background: #fff;
             box-sizing: border-box;
-            margin: 10px auto 0 auto; /* Reduced top margin */
+            margin: 10px auto 0 auto;
         }
 
         /* --- Responsive Design (Mobile/Tablet) --- */
@@ -262,7 +261,7 @@
         /* --- Print Specific Styles --- */
         @page {
             size: A4 portrait;
-            margin: 0mm; /* Force zero margins on the physical page */
+            margin: 0mm;
         }
 
         @media print {
@@ -296,19 +295,16 @@
                 box-shadow: none !important;
                 margin: 0 !important;
                 width: 210mm !important; 
-                /* Using exact 297mm height to fill the A4 page perfectly */
                 height: 297mm !important; 
                 transform: none !important;
                 page-break-after: avoid !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
-                /* Remove padding top/bottom on print to prevent content pushing down */
                 padding: 10mm 15mm !important; 
             }
             
             .border-box {
                 height: 100% !important;
-                /* Adjust print specific padding */
                 padding: 40px 30px 20px 30px !important;
                 page-break-inside: avoid !important;
             }
@@ -443,29 +439,4 @@
                             </div>
                             <div class="flex-row">
                                 <span class="label-student">Semester</span>
-                                <span class="value">: <span id="val-sem">8th</span></span>
-                            </div>
-                            <div class="flex-row">
-                                <span class="label-student">Section</span>
-                                <span class="value">: <span id="val-sec">Falcon(32M1)</span></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="footer-date">
-                        Date of Submission : <span id="val-date">16th Nov, 2026</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3. JavaScript for Data Binding -->
-    <script>
-        function updateField(spanId, newValue) {
-            document.getElementById(spanId).innerText = newValue;
-        }
-    </script>
-
-</body>
-</html>
+                                <span class="value">: <span id="val-
