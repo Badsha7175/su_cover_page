@@ -4,124 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Lab Report Generator</title>
+    <title>Lab Report Cover Page (Final)</title>
     <style>
-        /* --- CSS Variables for Perfect Scaling --- */
-        :root {
-            --scale-factor: 1;
-            --bg-color: #e2e8f0;
-        }
-
-        /* --- Workspace & Form Styles (Screen Only) --- */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
+        /* A4 Page Setup for Print */
+        @page {
+            size: A4;
             margin: 0;
-            padding: 20px;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px 0;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            gap: 30px;
-            overflow-x: hidden;
-        }
-
-        .form-container {
-            width: 100%;
-            max-width: 400px;
-            background: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            height: fit-content;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-sizing: border-box;
-            position: relative;
-            z-index: 10;
-        }
-
-        .form-container h3 {
-            margin-top: 0;
-            color: #2b3990;
-            text-align: center;
-            border-bottom: 2px solid #2b3990;
-            padding-bottom: 10px;
-        }
-
-        .input-group {
-            margin-bottom: 15px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 14px;
-            color: #333;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-family: inherit;
-        }
-
-        .btn-download {
-            width: 100%;
-            padding: 12px;
-            background-color: #2b3990;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.3s;
-        }
-
-        .btn-download:hover {
-            background-color: #1a245e;
-        }
-
-        /* --- Your Original A4 Page Styles --- */
-        .preview-outer {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .preview-wrapper {
-            width: calc(794px * var(--scale-factor));
-            height: calc(1123px * var(--scale-factor));
-            position: relative;
         }
 
         .page-container {
-            width: 794px; /* Exact A4 width in px (96dpi) */
-            height: 1123px; /* Exact A4 height in px (96dpi) */
+            width: 210mm;
+            /* A4 Width */
+            height: 297mm;
+            /* A4 Height */
             background: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            padding: 35px 45px; 
+            padding: 15mm;
+            /* Page margins */
             box-sizing: border-box;
-            transform-origin: top left;
-            transform: scale(var(--scale-factor));
-            font-family: 'Times New Roman', Times, serif;
         }
 
+        /* Fixed the Overflow Issue Here */
         .border-box {
             border: 1.5px dashed #000;
             position: relative;
             box-sizing: border-box;
             height: 100%;
+            /* Exactly 100% of the container minus padding */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 40px 25px 20px 25px; 
+            /* Spreads content evenly without overflowing */
+            padding: 50px 30px 40px 30px;
+            /* 80px top padding to clear the top banner */
         }
 
         .top-banner {
@@ -142,35 +67,36 @@
         }
 
         .header h1 {
-            font-size: 36px;
+            font-size: 39px;
             font-weight: 600;
-            margin: 0 0 20px 0;
+            margin: 0 0 25px 0;
             letter-spacing: 0.5px;
         }
 
         .logo-placeholder {
             display: inline-block;
-            width: 170px;
-            height: 190px;
-            margin-bottom: 20px;
+            width: 190px;
+            height: 210px;
+            margin-bottom: 25px;
             object-fit: contain;
+            /* Ensures the image fits inside the box properly */
         }
 
         .header h2 {
-            font-size: 30px;
+            font-size: 34px;
             font-weight: 600;
             margin: 0;
         }
 
         .info-table {
             width: 100%;
-            font-size: 21px;
+            font-size: 23px;
             border-collapse: collapse;
-            margin-bottom: 15px;
+            margin-bottom: 25px;
         }
 
         .info-table td {
-            padding: 8px 0;
+            padding: 10px 0;
             vertical-align: top;
         }
 
@@ -189,16 +115,16 @@
         .submit-box {
             width: 49%;
             border: 2px solid #000;
-            padding: 15px 9px;
-            font-size: 18px;
-            line-height: 1.6;
+            padding: 20px 9px;
+            font-size: 19px;
+            line-height: 1.8;
             box-sizing: border-box;
             background: #fff;
             z-index: 2;
         }
 
         .submit-title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
             margin-bottom: 10px;
         }
@@ -210,233 +136,127 @@
 
         .flex-row {
             display: flex;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
-        /* FIX: Increased label width to prevent text from breaking into a second line */
-        .flex-row .label { width: 155px; } 
-        .flex-row .label-student { width: 95px; }
-        .flex-row .value { flex: 1; }
+        .flex-row .label {
+            width: 140px;
+        }
+
+        .flex-row .label-student {
+            width: 95px;
+        }
+
+        .flex-row .value {
+            flex: 1;
+        }
 
         .footer-date {
             border: 1px solid #000;
             width: 70%;
-            padding: 12px;
+            padding: 15px;
             text-align: center;
             font-size: 19px;
             background: #fff;
             box-sizing: border-box;
-            margin: 10px auto 0 auto;
+            margin-top: 30px;
         }
 
-        /* --- Responsive Design (Mobile/Tablet) --- */
-        @media (max-width: 1024px) {
-            :root { --scale-factor: 0.8; }
-            body {
-                flex-direction: column;
-                align-items: center;
-                padding: 10px;
-                gap: 20px;
-            }
-            .form-container {
-                max-width: 100%;
-                height: auto;
-                max-height: none;
-                overflow-y: visible;
-            }
-        }
 
-        @media (max-width: 768px) {
-            :root { --scale-factor: 0.6; }
-        }
-        
-        @media (max-width: 480px) {
-            :root { --scale-factor: 0.44; }
-        }
-
-        @media (max-width: 380px) {
-            :root { --scale-factor: 0.36; }
-        }
-
-        /* --- Print Specific Styles --- */
-        @page {
-            size: A4 portrait;
-            margin: 0mm;
-        }
-
+        /* Print Specific Styles */
         @media print {
-            :root {
-                --scale-factor: 1 !important; 
-            }
-
             body {
                 background: none;
                 padding: 0;
-                margin: 0;
-                display: block; 
-            }
-
-            .form-container {
-                display: none !important; 
-            }
-
-            .preview-outer {
-                display: block;
-            }
-
-            .preview-wrapper {
-                width: 210mm !important;
-                height: 297mm !important;
-                margin: 0 !important;
-                padding: 0 !important;
             }
 
             .page-container {
-                box-shadow: none !important;
-                margin: 0 !important;
-                width: 210mm !important; 
-                height: 297mm !important; 
-                transform: none !important;
-                page-break-after: avoid !important;
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-                padding: 10mm 15mm !important; 
-            }
-            
-            .border-box {
-                height: 100% !important;
-                padding: 40px 30px 20px 30px !important;
-                page-break-inside: avoid !important;
+                box-shadow: none;
+                margin: 0;
+                width: 210mm;
+                height: 297mm;
             }
         }
     </style>
 </head>
 
 <body>
+    <div class="page-container">
+        <div class="border-box">
+            <!-- Top Blue Design -->
+            <div class="top-banner"></div>
 
-    <!-- 1. Form Section -->
-    <div class="form-container">
-        <h3>Fill Report Details</h3>
-        
-        <div class="input-group">
-            <label>Report / Assignment Type</label>
-            <input type="text" id="inp-rtype" value="Lab Report-01" oninput="updateField('val-rtype', this.value)">
-        </div>
+            <div class="header">
+                <h1>SONARGAON UNIVERSITY (SU)</h1>
 
-        <div class="input-group">
-            <label>Experiment Name</label>
-            <input type="text" id="inp-exp" value="Different Types of Inheritance in Java" oninput="updateField('val-exp', this.value)">
-        </div>
-        <div class="input-group">
-            <label>Course Title</label>
-            <input type="text" id="inp-ctitle" value="Object Oriented Programming II" oninput="updateField('val-ctitle', this.value)">
-        </div>
-        <div class="input-group">
-            <label>Course Code</label>
-            <input type="text" id="inp-ccode" value="CSE3203" oninput="updateField('val-ccode', this.value)">
-        </div>
-        <div class="input-group">
-            <label>Department</label>
-            <input type="text" id="inp-dept" value="Computer Science & Engineering (CSE)" oninput="updateField('val-dept', this.value)">
-        </div>
-        <hr>
-        <div class="input-group">
-            <label>Teacher Name</label>
-            <input type="text" id="inp-tname" value="Abdullah Al Rafi" oninput="updateField('val-tname', this.value)">
-        </div>
-        <div class="input-group">
-            <label>Designation</label>
-            <input type="text" id="inp-tdesig" value="Lecturer" oninput="updateField('val-tdesig', this.value)">
-        </div>
-        <hr>
-        <div class="input-group">
-            <label>Student Name</label>
-            <input type="text" id="inp-sname" value="Abdullah Bin Badsha" oninput="updateField('val-sname', this.value)">
-        </div>
-        <div class="input-group">
-            <label>Student ID</label>
-            <input type="text" id="inp-sid" value="CSE2402032025" oninput="updateField('val-sid', this.value)">
-        </div>
-        <div class="input-group">
-            <label>Semester</label>
-            <input type="text" id="inp-sem" value="8th" oninput="updateField('val-sem', this.value)">
-        </div>
-        <div class="input-group">
-            <label>Section</label>
-            <input type="text" id="inp-sec" value="Falcon(32M1)" oninput="updateField('val-sec', this.value)">
-        </div>
-        <hr>
-        <div class="input-group">
-            <label>Date of Submission</label>
-            <input type="text" id="inp-date" value="16th Nov, 2026" oninput="updateField('val-date', this.value)">
-        </div>
+                <!-- Updated Image Source -->
+                <img src="./SU-logo.png" alt="SU Logo" class="logo-placeholder">
 
-        <button class="btn-download" onclick="window.print()">Download / Save as PDF</button>
+                <h2>Lab Report-01</h2>
+            </div>
 
-        <!-- DEVELOPER CREDIT SECTION -->
-        <div style="margin-top: 25px; text-align: center; font-size: 13px; color: #666; border-top: 1px solid #eee; padding-top: 15px;">
-            Developed by <strong>Abdullah Bin Badsha</strong>
+            <table class="info-table">
+                <tr>
+                    <td>Experiment Name</td>
+                    <td>: Different Types of Inheritance in Java</td>
+                </tr>
+                <tr>
+                    <td>Course Title</td>
+                    <td>: Object Oriented Programming II</td>
+                </tr>
+                <tr>
+                    <td>Course Code</td>
+                    <td>: CSE3203</td>
+                </tr>
+                <tr>
+                    <td>Department</td>
+                    <td>: Computer Science & Engineering (CSE)</td>
+                </tr>
+            </table>
+
+            <div class="submission-area">
+                <div class="submit-box">
+                    <div class="submit-title"><span>Submitted To :</span></div>
+                    <div class="flex-row">
+                        <span class="label">Name of Teacher </span>
+                        <span class="value">: Md. Arafat</span>
+                    </div>
+                    <div class="flex-row">
+                        <span class="label">Designation</span>
+                        <span class="value">: Lecturer</span>
+                    </div>
+                    <div class="flex-row" style="margin-top: 40px;">
+                        <span class="label">Signature</span>
+                        <span class="value" style="color: #666;">: .........................</span>
+                    </div>
+                </div>
+
+                <div class="submit-box">
+                    <div class="submit-title"><span>Submitted By :</span></div>
+                    <div class="flex-row">
+                        <span class="label-student">Name</span>
+                        <span class="value">: Abdullah Bin Badsha</span>
+                    </div>
+                    <div class="flex-row">
+                        <span class="label-student">Student ID</span>
+                        <span class="value">: CSE2402032025</span>
+                    </div>
+                    <div class="flex-row">
+                        <span class="label-student">Semester</span>
+                        <span class="value">: 8th</span>
+                    </div>
+                    <div class="flex-row">
+                        <span class="label-student">Section</span>
+                        <span class="value">: Falcon(32M1)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-date">
+                Date of Submission : 16<sup>th</sup> Nov, 2026
+            </div>
         </div>
     </div>
+</body>
 
-    <!-- 2. Preview Section (Your A4 Page) -->
-    <div class="preview-outer">
-        <div class="preview-wrapper">
-            <div class="page-container">
-                <div class="border-box">
-                    <div class="top-banner"></div>
-                    <div class="header">
-                        <h1>SONARGAON UNIVERSITY (SU)</h1>
-                        <img src="./SU-logo.png" alt="SU Logo" class="logo-placeholder">
-                        <h2><span id="val-rtype">Lab Report-01</span></h2>
-                    </div>
-
-                    <table class="info-table">
-                        <tr>
-                            <td>Experiment Name</td>
-                            <td>: <span id="val-exp">Different Types of Inheritance in Java</span></td>
-                        </tr>
-                        <tr>
-                            <td>Course Title</td>
-                            <td>: <span id="val-ctitle">Object Oriented Programming II</span></td>
-                        </tr>
-                        <tr>
-                            <td>Course Code</td>
-                            <td>: <span id="val-ccode">CSE3203</span></td>
-                        </tr>
-                        <tr>
-                            <td>Department</td>
-                            <td>: <span id="val-dept">Computer Science & Engineering (CSE)</span></td>
-                        </tr>
-                    </table>
-
-                    <div class="submission-area">
-                        <div class="submit-box">
-                            <div class="submit-title"><span>Submitted To :</span></div>
-                            <div class="flex-row">
-                                <span class="label">Name of Teacher </span>
-                                <span class="value">: <span id="val-tname">Abdullah Al Rafi</span></span>
-                            </div>
-                            <div class="flex-row">
-                                <span class="label">Designation</span>
-                                <span class="value">: <span id="val-tdesig">Lecturer</span></span>
-                            </div>
-                            <div class="flex-row" style="margin-top: 40px;">
-                                <span class="label">Signature</span>
-                                <span class="value" style="color: #666;">: .........................</span>
-                            </div>
-                        </div>
-
-                        <div class="submit-box">
-                            <div class="submit-title"><span>Submitted By :</span></div>
-                            <div class="flex-row">
-                                <span class="label-student">Name</span>
-                                <span class="value">: <span id="val-sname">Abdullah Bin Badsha</span></span>
-                            </div>
-                            <div class="flex-row">
-                                <span class="label-student">Student ID</span>
-                                <span class="value">: <span id="val-sid">CSE2402032025</span></span>
-                            </div>
-                            <div class="flex-row">
-                                <span class="label-student">Semester</span>
-                                <span class="value">: <span id="val-
+</html>
