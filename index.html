@@ -214,38 +214,30 @@
             text-decoration: underline;
         }
 
-        /* --- PERFECT ALIGNMENT FOR SUBMIT BOXES --- */
+        /* Standard row formatting */
         .flex-row {
             display: flex;
             margin-bottom: 8px;
-            align-items: flex-start; /* Ensures everything aligns to the top if text wraps */
         }
 
         .flex-row .label {
-            /* The user-provided width */
-            width: 125px;
-            flex-shrink: 0;
+            width: 132px;
             white-space: nowrap;
         }
 
         .flex-row .label-student {
-            /* The user-provided width */
-            width: 90px;
-            flex-shrink: 0;
+            width: 92px;
             white-space: nowrap;
-        }
-
-        /* The colon gets its own separate box so it's always vertically aligned */
-        .flex-row .colon {
-            width: 15px;
-            flex-shrink: 0;
-            text-align: left;
         }
 
         .flex-row .value {
             flex: 1;
-            /* Allow the value to wrap normally if it's too long */
-            white-space: normal;
+            white-space: nowrap; /* Default is no wrap */
+        }
+
+        /* NEW: Class for wrapping names only */
+        .wrap-name {
+            white-space: normal !important;
             word-wrap: break-word; 
         }
 
@@ -491,18 +483,16 @@
                             <div class="submit-title"><span>Submitted To :</span></div>
                             <div class="flex-row">
                                 <span class="label">Name of Teacher </span>
-                                <span class="colon">:</span>
-                                <span class="value" id="val-tname">Abdullah Al Rafi</span>
+                                <!-- Added wrap-name class -->
+                                <span class="value wrap-name">: <span id="val-tname">Abdullah Al Rafi</span></span>
                             </div>
                             <div class="flex-row">
                                 <span class="label">Designation</span>
-                                <span class="colon">:</span>
-                                <span class="value" id="val-tdesig">Lecturer</span>
+                                <span class="value">: <span id="val-tdesig">Lecturer</span></span>
                             </div>
                             <div class="flex-row" style="margin-top: 40px;">
                                 <span class="label">Signature</span>
-                                <span class="colon">:</span>
-                                <span class="value" style="color: #666;">.........................</span>
+                                <span class="value" style="color: #666;">: .........................</span>
                             </div>
                         </div>
 
@@ -510,23 +500,20 @@
                             <div class="submit-title"><span>Submitted By :</span></div>
                             <div class="flex-row">
                                 <span class="label-student">Name</span>
-                                <span class="colon">:</span>
-                                <span class="value" id="val-sname">Abdullah Bin Badsha</span>
+                                <!-- Added wrap-name class -->
+                                <span class="value wrap-name">: <span id="val-sname">Abdullah Bin Badsha</span></span>
                             </div>
                             <div class="flex-row">
                                 <span class="label-student">Student ID</span>
-                                <span class="colon">:</span>
-                                <span class="value" id="val-sid">CSE2402032025</span>
+                                <span class="value">: <span id="val-sid">CSE2402032025</span></span>
                             </div>
                             <div class="flex-row">
                                 <span class="label-student">Semester</span>
-                                <span class="colon">:</span>
-                                <span class="value" id="val-sem">8<sup>th</sup></span>
+                                <span class="value">: <span id="val-sem">8<sup>th</sup></span></span>
                             </div>
                             <div class="flex-row">
                                 <span class="label-student">Section</span>
-                                <span class="colon">:</span>
-                                <span class="value" id="val-sec">Falcon(32M1)</span>
+                                <span class="value">: <span id="val-sec">Falcon(32M1)</span></span>
                             </div>
                         </div>
                     </div>
