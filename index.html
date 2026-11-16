@@ -13,6 +13,12 @@
         }
 
         /* --- Workspace & Form Styles (Screen Only) --- */
+        html, body {
+            /* Prevent Android Chrome from artificially increasing font sizes */
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
@@ -110,6 +116,8 @@
             transform-origin: top left;
             transform: scale(var(--scale-factor));
             font-family: 'Times New Roman', Times, serif;
+            /* Extra safety for text autosizing on mobile */
+            -webkit-text-size-adjust: 100%;
         }
 
         .border-box {
@@ -211,9 +219,10 @@
         .flex-row {
             display: flex;
             margin-bottom: 8px;
+            /* FIX: Absolutely force everything in this row to stay on one line */
+            white-space: nowrap;
         }
 
-        /* Guaranteed 1-line text wrapping fix */
         .flex-row .label {
             width: 160px;
             white-space: nowrap;
@@ -226,6 +235,8 @@
 
         .flex-row .value {
             flex: 1;
+            /* Prevent the value text (name) from ever wrapping */
+            white-space: nowrap;
         }
 
         .footer-date {
