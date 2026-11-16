@@ -6,11 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Lab Report Generator</title>
     <style>
-        /* --- Workspace & Form Styles (Screen Only) --- */
+        /* --- CSS Variables for Perfect Scaling --- */
         :root {
+            --scale-factor: 1;
             --bg-color: #e2e8f0;
         }
 
+        /* --- Workspace & Form Styles (Screen Only) --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
@@ -86,36 +88,41 @@
         }
 
         /* --- Your Original A4 Page Styles --- */
-        .preview-wrapper {
-            font-family: 'Times New Roman', Times, serif;
+        .preview-outer {
             display: flex;
             justify-content: center;
             width: 100%;
-            height: auto;
-            overflow: visible; /* Ensure nothing is cut off */
+        }
+
+        .preview-wrapper {
+            width: calc(794px * var(--scale-factor));
+            height: calc(1123px * var(--scale-factor));
+            position: relative;
         }
 
         .page-container {
-            width: 794px; /* Exact A4 width at 96dpi */
-            height: 1123px; /* Exact A4 height at 96dpi */
+            width: 794px; /* Exact A4 width in px (96dpi) */
+            height: 1123px; /* Exact A4 height in px (96dpi) */
             background: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            padding: 56px; /* Approx 15mm */
+            /* Standard screen padding */
+            padding: 56px; 
             box-sizing: border-box;
-            transform-origin: top center;
-            flex-shrink: 0;
+            transform-origin: top left;
+            transform: scale(var(--scale-factor));
+            font-family: 'Times New Roman', Times, serif;
         }
 
         .border-box {
             border: 1.5px dashed #000;
             position: relative;
             box-sizing: border-box;
-            height: 100%; /* Uses full container height */
+            height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 50px 30px 40px 30px;
+            padding: 40px 30px 30px 30px; 
         }
 
         .top-banner {
@@ -136,35 +143,35 @@
         }
 
         .header h1 {
-            font-size: 39px;
+            font-size: 38px;
             font-weight: 600;
-            margin: 0 0 25px 0;
+            margin: 0 0 20px 0;
             letter-spacing: 0.5px;
         }
 
         .logo-placeholder {
             display: inline-block;
-            width: 190px;
-            height: 210px;
-            margin-bottom: 25px;
+            width: 180px;
+            height: 200px;
+            margin-bottom: 20px;
             object-fit: contain;
         }
 
         .header h2 {
-            font-size: 34px;
+            font-size: 32px;
             font-weight: 600;
             margin: 0;
         }
 
         .info-table {
             width: 100%;
-            font-size: 23px;
+            font-size: 22px;
             border-collapse: collapse;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .info-table td {
-            padding: 10px 0;
+            padding: 8px 0;
             vertical-align: top;
         }
 
@@ -183,16 +190,16 @@
         .submit-box {
             width: 49%;
             border: 2px solid #000;
-            padding: 20px 9px;
-            font-size: 19px;
-            line-height: 1.8;
+            padding: 15px 9px;
+            font-size: 18px;
+            line-height: 1.6;
             box-sizing: border-box;
             background: #fff;
             z-index: 2;
         }
 
         .submit-title {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
             margin-bottom: 10px;
         }
@@ -204,86 +211,67 @@
 
         .flex-row {
             display: flex;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
-        .flex-row .label { width: 140px; }
+        /* Prevent text wrapping in submit boxes */
+        .flex-row .label { width: 145px; } 
         .flex-row .label-student { width: 95px; }
         .flex-row .value { flex: 1; }
 
         .footer-date {
             border: 1px solid #000;
             width: 70%;
-            padding: 15px;
+            padding: 12px;
             text-align: center;
             font-size: 19px;
             background: #fff;
             box-sizing: border-box;
-            /* Changed margin-top to a smaller, controlled value */
-            margin-top: 20px; 
-            /* Added margin-bottom to ensure it stays inside the border */
-            margin-bottom: 10px; 
+            margin: 15px auto 0 auto;
         }
 
         /* --- Responsive Design (Mobile/Tablet) --- */
         @media (max-width: 1024px) {
+            :root { --scale-factor: 0.8; }
             body {
                 flex-direction: column;
                 align-items: center;
                 padding: 10px;
                 gap: 20px;
             }
-
             .form-container {
                 max-width: 100%;
                 height: auto;
                 max-height: none;
                 overflow-y: visible;
             }
-            
-            .preview-wrapper {
-                justify-content: center;
-                /* Crucial for mobile view scaling */
-                transform-origin: top center;
-                transform: scale(0.8);
-                margin-bottom: -224px; /* 1123 * (1 - 0.8) */
-            }
-            
-            .page-container {
-                /* Removed zoom, using transform on wrapper instead */
-                transform: none;
-            }
         }
 
         @media (max-width: 768px) {
-            .preview-wrapper {
-                transform: scale(0.6);
-                margin-bottom: -449px; 
-            }
+            :root { --scale-factor: 0.6; }
         }
         
         @media (max-width: 480px) {
-            .preview-wrapper {
-                transform: scale(0.42); 
-                margin-bottom: -651px; 
-            }
+            :root { --scale-factor: 0.44; }
         }
 
         @media (max-width: 380px) {
-            .preview-wrapper {
-                transform: scale(0.35); 
-                margin-bottom: -730px; 
-            }
+            :root { --scale-factor: 0.36; }
         }
 
-        /* --- Print Specific Styles --- */
+        /* --- FINAL FIX FOR MOBILE PRINTING (SAMSUNG & CHROME) --- */
         @page {
             size: A4 portrait;
-            /* Force exact A4 size on print, eliminating default browser margins */
-            margin: 0 !important;
+            /* Absolute zero margins to let the div control the spacing */
+            margin: 0;
+            padding: 0;
         }
 
         @media print {
+            :root {
+                --scale-factor: 1 !important; 
+            }
+
             body {
                 background: none;
                 padding: 0;
@@ -292,42 +280,61 @@
             }
 
             .form-container {
-                display: none; 
+                display: none !important; 
+            }
+
+            .preview-outer {
+                display: block;
+                height: 100%;
             }
 
             .preview-wrapper {
-                display: block;
-                transform: none !important; /* Reset transform */
+                width: 210mm !important;
+                /* Crucial: let wrapper be 100% of the printed page height */
+                height: 297mm !important;
                 margin: 0 !important;
                 padding: 0 !important;
-                height: 1123px !important;
+                position: absolute;
+                top: 0;
+                left: 0;
             }
 
             .page-container {
                 box-shadow: none !important;
                 margin: 0 !important;
+                /* Force Exact dimensions */
                 width: 210mm !important; 
-                /* Set exact height for A4 */
-                height: 297mm !important; 
+                height: 297mm !important;
+                max-height: 297mm !important;
+                /* Reduced physical padding on the container so the border box expands */
+                padding: 5mm !important; 
                 transform: none !important;
                 page-break-after: avoid !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
-                /* Dynamically reduce padding specifically for mobile print rendering */
-                padding: 10mm 15mm !important; 
                 overflow: hidden !important;
+                position: absolute;
+                top: 0;
+                left: 0;
             }
             
             .border-box {
-                height: 100% !important;
+                /* Make the border box take up the remaining space inside the 5mm padding */
+                height: calc(100% - 10mm) !important;
+                max-height: calc(100% - 10mm) !important;
+                /* Inner padding to keep content away from the dashed border */
+                padding: 10mm 15mm 10mm 15mm !important;
                 page-break-inside: avoid !important;
-                /* Reduce internal padding during print to pull the date section up */
-                padding: 30px 30px 10px 30px !important;
+                box-sizing: border-box !important;
             }
             
-            /* Give the date section slightly less top margin during print to fit perfectly */
+            /* Squeeze the elements vertically during print to guarantee fit */
+            .header h1 { margin-bottom: 10px !important; }
+            .logo-placeholder { margin-bottom: 10px !important; height: 160px !important; }
+            .info-table { margin-bottom: 10px !important; }
+            
             .footer-date {
-                margin-top: 10px !important;
+                margin-top: 5px !important;
                 margin-bottom: 0 !important;
             }
         }
@@ -402,75 +409,77 @@
     </div>
 
     <!-- 2. Preview Section (Your A4 Page) -->
-    <div class="preview-wrapper">
-        <div class="page-container">
-            <div class="border-box">
-                <div class="top-banner"></div>
-                <div class="header">
-                    <h1>SONARGAON UNIVERSITY (SU)</h1>
-                    <img src="./SU-logo.png" alt="SU Logo" class="logo-placeholder">
-                    <h2><span id="val-rtype">Lab Report-01</span></h2>
-                </div>
+    <div class="preview-outer">
+        <div class="preview-wrapper">
+            <div class="page-container">
+                <div class="border-box">
+                    <div class="top-banner"></div>
+                    <div class="header">
+                        <h1>SONARGAON UNIVERSITY (SU)</h1>
+                        <img src="./SU-logo.png" alt="SU Logo" class="logo-placeholder">
+                        <h2><span id="val-rtype">Lab Report-01</span></h2>
+                    </div>
 
-                <table class="info-table">
-                    <tr>
-                        <td>Experiment Name</td>
-                        <td>: <span id="val-exp">Different Types of Inheritance in Java</span></td>
-                    </tr>
-                    <tr>
-                        <td>Course Title</td>
-                        <td>: <span id="val-ctitle">Object Oriented Programming II</span></td>
-                    </tr>
-                    <tr>
-                        <td>Course Code</td>
-                        <td>: <span id="val-ccode">CSE3203</span></td>
-                    </tr>
-                    <tr>
-                        <td>Department</td>
-                        <td>: <span id="val-dept">Computer Science & Engineering (CSE)</span></td>
-                    </tr>
-                </table>
+                    <table class="info-table">
+                        <tr>
+                            <td>Experiment Name</td>
+                            <td>: <span id="val-exp">Different Types of Inheritance in Java</span></td>
+                        </tr>
+                        <tr>
+                            <td>Course Title</td>
+                            <td>: <span id="val-ctitle">Object Oriented Programming II</span></td>
+                        </tr>
+                        <tr>
+                            <td>Course Code</td>
+                            <td>: <span id="val-ccode">CSE3203</span></td>
+                        </tr>
+                        <tr>
+                            <td>Department</td>
+                            <td>: <span id="val-dept">Computer Science & Engineering (CSE)</span></td>
+                        </tr>
+                    </table>
 
-                <div class="submission-area">
-                    <div class="submit-box">
-                        <div class="submit-title"><span>Submitted To :</span></div>
-                        <div class="flex-row">
-                            <span class="label">Name of Teacher </span>
-                            <span class="value">: <span id="val-tname">Abdullah Al Rafi</span></span>
+                    <div class="submission-area">
+                        <div class="submit-box">
+                            <div class="submit-title"><span>Submitted To :</span></div>
+                            <div class="flex-row">
+                                <span class="label">Name of Teacher </span>
+                                <span class="value">: <span id="val-tname">Abdullah Al Rafi</span></span>
+                            </div>
+                            <div class="flex-row">
+                                <span class="label">Designation</span>
+                                <span class="value">: <span id="val-tdesig">Lecturer</span></span>
+                            </div>
+                            <div class="flex-row" style="margin-top: 40px;">
+                                <span class="label">Signature</span>
+                                <span class="value" style="color: #666;">: .........................</span>
+                            </div>
                         </div>
-                        <div class="flex-row">
-                            <span class="label">Designation</span>
-                            <span class="value">: <span id="val-tdesig">Lecturer</span></span>
-                        </div>
-                        <div class="flex-row" style="margin-top: 40px;">
-                            <span class="label">Signature</span>
-                            <span class="value" style="color: #666;">: .........................</span>
+
+                        <div class="submit-box">
+                            <div class="submit-title"><span>Submitted By :</span></div>
+                            <div class="flex-row">
+                                <span class="label-student">Name</span>
+                                <span class="value">: <span id="val-sname">Abdullah Bin Badsha</span></span>
+                            </div>
+                            <div class="flex-row">
+                                <span class="label-student">Student ID</span>
+                                <span class="value">: <span id="val-sid">CSE2402032025</span></span>
+                            </div>
+                            <div class="flex-row">
+                                <span class="label-student">Semester</span>
+                                <span class="value">: <span id="val-sem">8th</span></span>
+                            </div>
+                            <div class="flex-row">
+                                <span class="label-student">Section</span>
+                                <span class="value">: <span id="val-sec">Falcon(32M1)</span></span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="submit-box">
-                        <div class="submit-title"><span>Submitted By :</span></div>
-                        <div class="flex-row">
-                            <span class="label-student">Name</span>
-                            <span class="value">: <span id="val-sname">Abdullah Bin Badsha</span></span>
-                        </div>
-                        <div class="flex-row">
-                            <span class="label-student">Student ID</span>
-                            <span class="value">: <span id="val-sid">CSE2402032025</span></span>
-                        </div>
-                        <div class="flex-row">
-                            <span class="label-student">Semester</span>
-                            <span class="value">: <span id="val-sem">8th</span></span>
-                        </div>
-                        <div class="flex-row">
-                            <span class="label-student">Section</span>
-                            <span class="value">: <span id="val-sec">Falcon(32M1)</span></span>
-                        </div>
+                    <div class="footer-date">
+                        Date of Submission : <span id="val-date">16th Nov, 2026</span>
                     </div>
-                </div>
-
-                <div class="footer-date">
-                    Date of Submission : <span id="val-date">16th Nov, 2026</span>
                 </div>
             </div>
         </div>
