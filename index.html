@@ -278,14 +278,16 @@
 
         /* --- Print Specific Styles --- */
         @page {
-            size: A4;
-            margin: 0;
+            size: A4 portrait;
+            /* Force exact A4 size on print, eliminating default browser margins */
+            margin: 0 !important;
         }
 
         @media print {
             body {
                 background: none;
                 padding: 0;
+                margin: 0;
                 display: block; 
             }
 
@@ -297,20 +299,36 @@
                 display: block;
                 transform: none !important; /* Reset transform */
                 margin: 0 !important;
+                padding: 0 !important;
+                height: 1123px !important;
             }
 
             .page-container {
-                box-shadow: none;
+                box-shadow: none !important;
                 margin: 0 !important;
                 width: 210mm !important; 
-                height: 297mm !important;
-                padding: 15mm !important;
+                /* Set exact height for A4 */
+                height: 297mm !important; 
                 transform: none !important;
-                page-break-after: avoid; 
+                page-break-after: avoid !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                /* Dynamically reduce padding specifically for mobile print rendering */
+                padding: 10mm 15mm !important; 
+                overflow: hidden !important;
             }
             
             .border-box {
-                page-break-inside: avoid;
+                height: 100% !important;
+                page-break-inside: avoid !important;
+                /* Reduce internal padding during print to pull the date section up */
+                padding: 30px 30px 10px 30px !important;
+            }
+            
+            /* Give the date section slightly less top margin during print to fit perfectly */
+            .footer-date {
+                margin-top: 10px !important;
+                margin-bottom: 0 !important;
             }
         }
     </style>
