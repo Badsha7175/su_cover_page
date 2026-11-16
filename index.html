@@ -102,10 +102,13 @@
 
         .page-container {
             width: 794px;
+            /* Exact A4 width in px (96dpi) */
             height: 1123px;
+            /* Exact A4 height in px (96dpi) */
             background: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             padding: 56px;
+            /* Approx 15mm */
             box-sizing: border-box;
             transform-origin: top left;
             transform: scale(var(--scale-factor));
@@ -117,6 +120,7 @@
             position: relative;
             box-sizing: border-box;
             height: 100%;
+            /* Uses full container height */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -213,15 +217,13 @@
             margin-bottom: 8px;
         }
 
-        /* Guaranteed 1-line text wrapping fix */
+        /* Prevent text wrapping in submit boxes */
         .flex-row .label {
-            width: 160px;
-            white-space: nowrap;
+            width: 145px;
         }
 
         .flex-row .label-student {
-            width: 100px;
-            white-space: nowrap;
+            width: 95px;
         }
 
         .flex-row .value {
@@ -281,6 +283,7 @@
         /* --- FINAL FIX FOR MOBILE PRINTING (SAMSUNG & CHROME) --- */
         @page {
             size: A4 portrait;
+            /* Absolute zero margins to let the div control the spacing */
             margin: 0;
             padding: 0;
         }
@@ -308,6 +311,7 @@
 
             .preview-wrapper {
                 width: 210mm !important;
+                /* Crucial: let wrapper be 100% of the printed page height */
                 height: 297mm !important;
                 margin: 0 !important;
                 padding: 0 !important;
@@ -319,9 +323,11 @@
             .page-container {
                 box-shadow: none !important;
                 margin: 0 !important;
+                /* Force Exact dimensions */
                 width: 210mm !important;
                 height: 297mm !important;
                 max-height: 297mm !important;
+                /* Reduced physical padding on the container so the border box expands */
                 padding: 5mm !important;
                 transform: none !important;
                 page-break-after: avoid !important;
@@ -334,13 +340,16 @@
             }
 
             .border-box {
+                /* Make the border box take up the remaining space inside the 5mm padding */
                 height: calc(100% - 10mm) !important;
                 max-height: calc(100% - 10mm) !important;
+                /* Inner padding to keep content away from the dashed border */
                 padding: 10mm 15mm 10mm 15mm !important;
                 page-break-inside: avoid !important;
                 box-sizing: border-box !important;
             }
 
+            /* Squeeze the elements vertically during print to guarantee fit */
             .header h1 {
                 margin-bottom: 10px !important;
             }
@@ -453,4 +462,77 @@
                         </tr>
                         <tr>
                             <td>Course Title</td>
-                            <td>: <span id="val-ctitle">Object Oriented Programming
+                            <td>: <span id="val-ctitle">Object Oriented Programming II</span></td>
+                        </tr>
+                        <tr>
+                            <td>Course Code</td>
+                            <td>: <span id="val-ccode">CSE3203</span></td>
+                        </tr>
+                        <tr>
+                            <td>Department</td>
+                            <td>: <span id="val-dept">Computer Science & Engineering (CSE)</span></td>
+                        </tr>
+                    </table>
+
+                    <div class="submission-area">
+                        <div class="submit-box">
+                            <div class="submit-title"><span>Submitted To :</span></div>
+                            <div class="flex-row">
+                                <span class="label">Name of Teacher </span>
+                                <span class="value">: <span id="val-tname">Abdullah Al Rafi</span></span>
+                            </div>
+                            <div class="flex-row">
+                                <span class="label">Designation</span>
+                                <span class="value">: <span id="val-tdesig">Lecturer</span></span>
+                            </div>
+                            <div class="flex-row" style="margin-top: 40px;">
+                                <span class="label">Signature</span>
+                                <span class="value" style="color: #666;">: .........................</span>
+                            </div>
+                        </div>
+
+                        <div class="submit-box">
+                            <div class="submit-title"><span>Submitted By :</span></div>
+                            <div class="flex-row">
+                                <span class="label-student">Name</span>
+                                <span class="value">: <span id="val-sname">Abdullah Bin Badsha</span></span>
+                            </div>
+                            <div class="flex-row">
+                                <span class="label-student">Student ID</span>
+                                <span class="value">: <span id="val-sid">CSE2402032025</span></span>
+                            </div>
+                            <div class="flex-row">
+                                <span class="label-student">Semester</span>
+                                <span class="value">: <span id="val-sem">8<sup>th</sup></span></span>
+                            </div>
+                            <div class="flex-row">
+                                <span class="label-student">Section</span>
+                                <span class="value">: <span id="val-sec">Falcon(32M1)</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="footer-date">
+                        Date of Submission : <span id="val-date">16<sup>th</sup> Nov, 2026</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. JavaScript for Data Binding -->
+    <script>
+        function updateField(spanId, newValue) {
+            document.getElementById(spanId).innerText = newValue;
+        }
+
+        // Auto convert th, st, nd, rd to superscript
+        function updateDateSuffix(spanId, newValue) {
+            const formattedValue = newValue.replace(/(\d+)(st|nd|rd|th)/gi, "$1<sup>$2</sup>");
+            document.getElementById(spanId).innerHTML = formattedValue;
+        }
+    </script>
+
+</body>
+
+</html>
