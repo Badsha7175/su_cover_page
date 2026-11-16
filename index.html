@@ -13,6 +13,11 @@
         }
 
         /* --- Workspace & Form Styles (Screen Only) --- */
+        html, body {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
@@ -102,17 +107,15 @@
 
         .page-container {
             width: 794px;
-            /* Exact A4 width in px (96dpi) */
             height: 1123px;
-            /* Exact A4 height in px (96dpi) */
             background: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             padding: 56px;
-            /* Approx 15mm */
             box-sizing: border-box;
             transform-origin: top left;
             transform: scale(var(--scale-factor));
             font-family: 'Times New Roman', Times, serif;
+            -webkit-text-size-adjust: 100%;
         }
 
         .border-box {
@@ -120,7 +123,6 @@
             position: relative;
             box-sizing: border-box;
             height: 100%;
-            /* Uses full container height */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -212,22 +214,31 @@
             text-decoration: underline;
         }
 
+        /* Standard row formatting */
         .flex-row {
             display: flex;
             margin-bottom: 8px;
         }
 
-        /* Prevent text wrapping in submit boxes */
         .flex-row .label {
-            width: 145px;
+            width: 160px;
+            white-space: nowrap;
         }
 
         .flex-row .label-student {
-            width: 95px;
+            width: 100px;
+            white-space: nowrap;
         }
 
         .flex-row .value {
             flex: 1;
+            white-space: nowrap; /* Default is no wrap */
+        }
+
+        /* NEW: Class for wrapping names only */
+        .wrap-name {
+            white-space: normal !important;
+            word-wrap: break-word; 
         }
 
         .footer-date {
@@ -283,7 +294,6 @@
         /* --- FINAL FIX FOR MOBILE PRINTING (SAMSUNG & CHROME) --- */
         @page {
             size: A4 portrait;
-            /* Absolute zero margins to let the div control the spacing */
             margin: 0;
             padding: 0;
         }
@@ -311,7 +321,6 @@
 
             .preview-wrapper {
                 width: 210mm !important;
-                /* Crucial: let wrapper be 100% of the printed page height */
                 height: 297mm !important;
                 margin: 0 !important;
                 padding: 0 !important;
@@ -323,11 +332,9 @@
             .page-container {
                 box-shadow: none !important;
                 margin: 0 !important;
-                /* Force Exact dimensions */
                 width: 210mm !important;
                 height: 297mm !important;
                 max-height: 297mm !important;
-                /* Reduced physical padding on the container so the border box expands */
                 padding: 5mm !important;
                 transform: none !important;
                 page-break-after: avoid !important;
@@ -340,16 +347,13 @@
             }
 
             .border-box {
-                /* Make the border box take up the remaining space inside the 5mm padding */
                 height: calc(100% - 10mm) !important;
                 max-height: calc(100% - 10mm) !important;
-                /* Inner padding to keep content away from the dashed border */
                 padding: 10mm 15mm 10mm 15mm !important;
                 page-break-inside: avoid !important;
                 box-sizing: border-box !important;
             }
 
-            /* Squeeze the elements vertically during print to guarantee fit */
             .header h1 {
                 margin-bottom: 10px !important;
             }
@@ -479,7 +483,8 @@
                             <div class="submit-title"><span>Submitted To :</span></div>
                             <div class="flex-row">
                                 <span class="label">Name of Teacher </span>
-                                <span class="value">: <span id="val-tname">Abdullah Al Rafi</span></span>
+                                <!-- Added wrap-name class -->
+                                <span class="value wrap-name">: <span id="val-tname">Abdullah Al Rafi</span></span>
                             </div>
                             <div class="flex-row">
                                 <span class="label">Designation</span>
@@ -495,7 +500,8 @@
                             <div class="submit-title"><span>Submitted By :</span></div>
                             <div class="flex-row">
                                 <span class="label-student">Name</span>
-                                <span class="value">: <span id="val-sname">Abdullah Bin Badsha</span></span>
+                                <!-- Added wrap-name class -->
+                                <span class="value wrap-name">: <span id="val-sname">Abdullah Bin Badsha</span></span>
                             </div>
                             <div class="flex-row">
                                 <span class="label-student">Student ID</span>
